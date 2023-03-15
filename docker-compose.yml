@@ -1,0 +1,13 @@
+version: '3.9'
+
+services:
+  elixir:
+    image: elixir:latest
+    container_name: elixir
+    tty: true
+    stdin_open: true
+    restart: "no"
+    volumes:
+      - ./.mix:/root/.mix
+      - ./app:/home/app
+    working_dir: /home/app
