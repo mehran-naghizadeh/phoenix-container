@@ -1,12 +1,38 @@
 version: '3.9'
 
 services:
+  db:
+    image: postgres:15.2
+    container_name: elixir_programmer_db
+    environment:
+      # - POSTGRES_DB=app_development
+      # - POSTGRES_PASSWORD=password
+      # Set user/password for Postgres
+      POSTGRES_USER: mehran
+      POSTGRES_PASSWORD: elixir_programmer_db_password
+      # Set a path where Postgres should store the data
+      PGDATA: /var/lib/postgresql/data/pgdata
+    restart: unless-stopped
+    volumes:
+      - ./.db:/var/lib/postgresql/data
+
   elixir:
     image: elixir:latest
-    container_name: elixir
+    container_name: elixir_programmer_elixir
+    environment:
+      # Variables to connect to our Postgres server
+      PGUSER: mehran
+      PGPASSWORD: elixir_programmer_db_password
+      PGDATABASE: postgres
+      PGPORT: 5432
+      # Hostname of our Postgres container
+      PGHOST: db
     tty: true
     stdin_open: true
     restart: "no"
+    ports:
+      # Mapping the port to make the Phoenix app accessible outside of the container
+      - 4000:4000
     volumes:
       - ./.mix:/root/.mix
       - ./app:/home/app
