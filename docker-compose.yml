@@ -17,7 +17,7 @@ services:
       - ./.db:/var/lib/postgresql/data
 
   elixir:
-    image: elixir:latest
+    build: .
     container_name: elixir_programmer_elixir
     environment:
       # Variables to connect to our Postgres server
